@@ -2,6 +2,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import Head from "next/head";
 import Layout from "~/components/layout";
+import { Button } from "~/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -10,10 +19,9 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { TABLE_DATE_FORMAT } from "~/constants";
 import { fetchData } from "~/utils";
 import type { ReturnType } from "./api/voyage/getAll";
-import { Button } from "~/components/ui/button";
-import { TABLE_DATE_FORMAT } from "~/constants";
 
 export default function Home() {
   const { data: voyages } = useQuery<ReturnType>(["voyages"], () =>
@@ -44,6 +52,18 @@ export default function Home() {
 
   return (
     <>
+      <Sheet>
+        <SheetTrigger>Open</SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Are you sure absolutely sure?</SheetTitle>
+            <SheetDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
       <Head>
         <title>Voyages | DFDS</title>
         <link rel="icon" href="/favicon.ico" />
