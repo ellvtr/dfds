@@ -1,9 +1,49 @@
+import {
+  useMutation /* , useQuery, useQueryClient */,
+} from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { SheetHeader, SheetTitle } from "~/components/ui/sheet";
 
+export type NewVoyageFormValues = {
+  portOfLoading: string;
+  portOfDischarge: string;
+  scheduledDeparture: number;
+  scheduledArrival: number;
+};
+
 export const NewVoyageForm = () => {
   const [errors, setErrors] = useState<string[]>([]);
+
+  const mutation = useMutation(
+    async (values: NewVoyageFormValues) => {
+      const {
+        portOfDischarge,
+        portOfLoading,
+        scheduledArrival,
+        scheduledDeparture,
+      } = values;
+
+      const queryString = `portOfDischarge=${portOfDischarge}&portOfLoading=${portOfLoading}&scheduledArrival=${scheduledArrival}&scheduledDeparture=${scheduledDeparture}`;
+
+      const response = await fetch(`/api/voyage/add?${queryString}`, {
+        method: "PUT",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create the voyage");
+      }
+    },
+    {
+      onSuccess: () => {
+        /* console.log(`onSuccess`); */
+      },
+    }
+  );
+
+  const handleCreate = (values: NewVoyageFormValues) => {
+    mutation.mutate(values);
+  };
 
   return (
     <SheetHeader>
@@ -34,11 +74,13 @@ export const NewVoyageForm = () => {
           <p key={error}>{error}</p>
         ))}
       </div>
+
       <Button
         onClick={() => {
           const values = getValues();
           const errors = getFormErrors(values);
           errors ? setErrors(errors) : setErrors([]);
+          if (!errors) handleCreate(values);
         }}
         variant="outline"
       >
@@ -48,13 +90,15 @@ export const NewVoyageForm = () => {
   );
 };
 
-export type NewVoyageFormValues = {
-  portOfLoading: string;
-  portOfDischarge: string;
-  scheduledDeparture: number;
-  scheduledArrival: number;
-};
+/*
+NB: I'm aware that 'react-query' or other libraries in this project 
+may have form functionality and validation built-in 
+- similar to Formik which I have used around 2 years ago. 
+However, it was quicker for me to create my own in this case,
+than to learn a new library.
+*/
 
+/** Get form values from DOM, quick and dirty */
 const getValues = () => {
   const depStr = (
     document.getElementById("scheduledDeparture") as HTMLInputElement
@@ -77,10 +121,10 @@ const getValues = () => {
     scheduledArrival: arrUnix,
   };
 
-  // console.log(`values`, values);
   return values;
 };
 
+/** Get form errors if any, otherwise return null */
 const getFormErrors = (values: NewVoyageFormValues) => {
   const errors: string[] = [];
 

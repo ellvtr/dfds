@@ -1,31 +1,37 @@
-import type { Vessel, Voyage } from "@prisma/client";
-import type { NextApiHandler, NextApiResponse, NextApiRequest } from "next";
+import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "~/server/db";
 
-export type ReturnType = (Voyage & { vessel: Vessel })[];
+export type NewVoyageQueryPayload = {
+  portOfLoading: string;
+  portOfDischarge: string;
+  scheduledDeparture: string;
+  scheduledArrival: string;
+};
 
 const handler: NextApiHandler = async (
   req: NextApiRequest,
   res: NextApiResponse<undefined>
 ) => {
+  // Added 'GET' in order to debug in browser
   if (req.method === "PUT" || req.method === "GET") {
-    console.log(`req`, req);
-    const depart = 1704812400000;
-    const arrive = 1704873600000;
+    const query = req.query as NewVoyageQueryPayload;
+    const {
+      portOfDischarge,
+      portOfLoading,
+      scheduledArrival,
+      scheduledDeparture,
+    } = query;
+    console.log(`query`, query);
 
     const createdVoyage = await prisma.voyage.create({
       data: {
-        portOfLoading: "Oslo",
-        portOfDischarge: "Copenhagen",
-        scheduledDeparture: new Date(depart).toISOString(),
-        scheduledArrival: new Date(arrive).toISOString(),
-        // Currently hardcoded to avoid further complexity in this code challenge:
+        portOfLoading,
+        portOfDischarge,
+        scheduledDeparture: new Date(Number(scheduledDeparture)).toISOString(),
+        scheduledArrival: new Date(Number(scheduledArrival)).toISOString(),
+        // Currently hardcoded 'vesselId' to avoid further complexity in this code challenge:
         vesselId: "clps1l18j0001103bi6z7tm68",
       },
-      // where: {
-      //   id: req.query.id as string,
-      // },
-      // ...req.body,
     });
 
     console.log(`createdVoyage`, createdVoyage);

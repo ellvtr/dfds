@@ -47,7 +47,9 @@ export default function Home() {
   return (
     <>
       <Sheet>
-        <SheetTrigger>Create</SheetTrigger>
+        <SheetTrigger>
+          <Button style={{ margin: "0.5rem" }}>New voyage</Button>
+        </SheetTrigger>
         <SheetContent>
           <NewVoyageForm />
         </SheetContent>
