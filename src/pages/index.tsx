@@ -119,7 +119,7 @@ export default function Home() {
           </TableBody>
         </Table>
       </Layout>
-      {/* Voyage count debugging purposes: */}
+      {/* Voyage count for debugging purposes: */}
       <div style={{ margin: "1rem" }}>
         <p>Number of voyages: {voyages?.length}</p>
       </div>
