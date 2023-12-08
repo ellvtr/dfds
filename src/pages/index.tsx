@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <>
       <Sheet>
-        <SheetTrigger>Open</SheetTrigger>
+        <SheetTrigger>Create</SheetTrigger>
         <SheetContent>
           <SheetHeader>
             <SheetTitle>Are you sure absolutely sure?</SheetTitle>
@@ -108,6 +108,9 @@ export default function Home() {
           </TableBody>
         </Table>
       </Layout>
+      <div style={{ margin: "1rem" }}>
+        <p>Number of voyages: {voyages?.length}</p>
+      </div>
     </>
   );
 }
