@@ -15,10 +15,11 @@ const handler: NextApiHandler = async (
 
     const createdVoyage = await prisma.voyage.create({
       data: {
-        portOfDischarge: "Copenhagen",
         portOfLoading: "Oslo",
+        portOfDischarge: "Copenhagen",
         scheduledDeparture: new Date(depart).toISOString(),
         scheduledArrival: new Date(arrive).toISOString(),
+        // Currently hardcoded to avoid further complexity in this code challenge:
         vesselId: "clps1l18j0001103bi6z7tm68",
       },
       // where: {

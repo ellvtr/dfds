@@ -1,16 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import Head from "next/head";
+import { NewVoyageForm } from "~/components/NewVoyageForm";
 import Layout from "~/components/layout";
 import { Button } from "~/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "~/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
 import {
   Table,
   TableBody,
@@ -55,13 +49,7 @@ export default function Home() {
       <Sheet>
         <SheetTrigger>Create</SheetTrigger>
         <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Are you sure absolutely sure?</SheetTitle>
-            <SheetDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </SheetDescription>
-          </SheetHeader>
+          <NewVoyageForm />
         </SheetContent>
       </Sheet>
       <Head>
