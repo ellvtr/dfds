@@ -8,26 +8,18 @@ export type NewVoyageQueryPayload = {
   scheduledArrival: string;
 };
 
-const handler: NextApiHandler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<undefined>
-) => {
+const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse<undefined>) => {
   // Added 'GET' in order to debug in browser
   if (req.method === "PUT" || req.method === "GET") {
     const query = req.query as NewVoyageQueryPayload;
-    const {
-      portOfDischarge,
-      portOfLoading,
-      scheduledArrival,
-      scheduledDeparture,
-    } = query;
+    const { portOfDischarge, portOfLoading, scheduledArrival, scheduledDeparture } = query;
 
     const createdVoyage = await prisma.voyage.create({
       data: {
         portOfLoading,
         portOfDischarge,
-        scheduledDeparture: new Date(Number(scheduledDeparture)).toISOString(),
-        scheduledArrival: new Date(Number(scheduledArrival)).toISOString(),
+        scheduledDeparture: new Date(parseInt(scheduledDeparture)).toISOString(),
+        scheduledArrival: new Date(parseInt(scheduledArrival)).toISOString(),
         // Currently hardcoded 'vesselId' to avoid further complexity in this code challenge.
         // However, this fails after `npm run db:reset` because the vesselId's change.
         // Workaround: Open the sqllite db and find a valid vesselId and replace the one below.
