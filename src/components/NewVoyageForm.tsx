@@ -3,7 +3,7 @@ import {
 } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
-import { SheetHeader, SheetTitle } from "~/components/ui/sheet";
+import { SheetClose, SheetHeader, SheetTitle } from "~/components/ui/sheet";
 
 export type NewVoyageFormValues = {
   portOfLoading: string;
@@ -36,7 +36,8 @@ export const NewVoyageForm = () => {
     },
     {
       onSuccess: () => {
-        /* console.log(`onSuccess`); */
+        // This is a hack, but "sheet" doesn't seem to export a way to close it programmatically:
+        document.getElementById("cancelNewVoyage")?.click();
       },
     }
   );
@@ -82,10 +83,12 @@ export const NewVoyageForm = () => {
           errors ? setErrors(errors) : setErrors([]);
           if (!errors) handleCreate(values);
         }}
-        variant="outline"
       >
         Submit
       </Button>
+      <SheetClose style={{ width: "100%" }} id="cancelNewVoyage">
+        Cancel
+      </SheetClose>
     </SheetHeader>
   );
 };
