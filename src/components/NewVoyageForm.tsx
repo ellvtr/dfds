@@ -1,6 +1,4 @@
-import {
-  useMutation /* , useQuery, useQueryClient */,
-} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { SheetClose, SheetHeader, SheetTitle } from "~/components/ui/sheet";
@@ -17,12 +15,7 @@ export const NewVoyageForm = () => {
 
   const mutation = useMutation(
     async (values: NewVoyageFormValues) => {
-      const {
-        portOfDischarge,
-        portOfLoading,
-        scheduledArrival,
-        scheduledDeparture,
-      } = values;
+      const { portOfDischarge, portOfLoading, scheduledArrival, scheduledDeparture } = values;
 
       const queryString = `portOfDischarge=${portOfDischarge}&portOfLoading=${portOfLoading}&scheduledArrival=${scheduledArrival}&scheduledDeparture=${scheduledDeparture}`;
 
@@ -57,18 +50,10 @@ export const NewVoyageForm = () => {
       <input type="text" id="portOfDischarge" name="portOfDischarge" />
 
       <label htmlFor="departure">Departure</label>
-      <input
-        type="datetime-local"
-        id="scheduledDeparture"
-        name="scheduledDeparture"
-      />
+      <input type="datetime-local" id="scheduledDeparture" name="scheduledDeparture" />
 
       <label htmlFor="arrival">Arrival</label>
-      <input
-        type="datetime-local"
-        id="scheduledArrival"
-        name="scheduledArrival"
-      />
+      <input type="datetime-local" id="scheduledArrival" name="scheduledArrival" />
 
       <div style={{ color: "red" }}>
         {errors.map((error) => (
@@ -105,23 +90,15 @@ than to learn a new library.
 
 /** Get form values from DOM, quick and dirty */
 const getValues = () => {
-  const depStr = (
-    document.getElementById("scheduledDeparture") as HTMLInputElement
-  )?.value;
+  const depStr = (document.getElementById("scheduledDeparture") as HTMLInputElement)?.value;
   const depUnix = new Date(depStr).valueOf();
 
-  const arrStr = (
-    document.getElementById("scheduledArrival") as HTMLInputElement
-  )?.value;
+  const arrStr = (document.getElementById("scheduledArrival") as HTMLInputElement)?.value;
   const arrUnix = new Date(arrStr).valueOf();
 
   const values: NewVoyageFormValues = {
-    portOfLoading: (
-      document.getElementById("portOfLoading") as HTMLInputElement
-    )?.value,
-    portOfDischarge: (
-      document.getElementById("portOfDischarge") as HTMLInputElement
-    )?.value,
+    portOfLoading: (document.getElementById("portOfLoading") as HTMLInputElement)?.value,
+    portOfDischarge: (document.getElementById("portOfDischarge") as HTMLInputElement)?.value,
     scheduledDeparture: depUnix,
     scheduledArrival: arrUnix,
   };

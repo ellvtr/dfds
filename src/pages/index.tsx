@@ -5,14 +5,7 @@ import { NewVoyageForm } from "~/components/NewVoyageForm";
 import Layout from "~/components/layout";
 import { Button } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
 import { Toaster } from "~/components/ui/toaster";
 import { useToast } from "~/components/ui/use-toast";
 import { TABLE_DATE_FORMAT } from "~/constants";
@@ -20,9 +13,7 @@ import { fetchData } from "~/utils";
 import type { ReturnType } from "./api/voyage/getAll";
 
 export default function Home() {
-  const { data: voyages } = useQuery<ReturnType>(["voyages"], () =>
-    fetchData("voyage/getAll")
-  );
+  const { data: voyages } = useQuery<ReturnType>(["voyages"], () => fetchData("voyage/getAll"));
 
   const { toast } = useToast();
 
@@ -93,23 +84,13 @@ export default function Home() {
           <TableBody>
             {voyages?.map((voyage) => (
               <TableRow key={voyage.id}>
-                <TableCell>
-                  {format(
-                    new Date(voyage.scheduledDeparture),
-                    TABLE_DATE_FORMAT
-                  )}
-                </TableCell>
-                <TableCell>
-                  {format(new Date(voyage.scheduledArrival), TABLE_DATE_FORMAT)}
-                </TableCell>
+                <TableCell>{format(new Date(voyage.scheduledDeparture), TABLE_DATE_FORMAT)}</TableCell>
+                <TableCell>{format(new Date(voyage.scheduledArrival), TABLE_DATE_FORMAT)}</TableCell>
                 <TableCell>{voyage.portOfLoading}</TableCell>
                 <TableCell>{voyage.portOfDischarge}</TableCell>
                 <TableCell>{voyage.vessel.name}</TableCell>
                 <TableCell>
-                  <Button
-                    onClick={() => handleDelete(voyage.id)}
-                    variant="outline"
-                  >
+                  <Button onClick={() => handleDelete(voyage.id)} variant="outline">
                     X
                   </Button>
                 </TableCell>
