@@ -28,8 +28,10 @@ const handler: NextApiHandler = async (
         portOfDischarge,
         scheduledDeparture: new Date(Number(scheduledDeparture)).toISOString(),
         scheduledArrival: new Date(Number(scheduledArrival)).toISOString(),
-        // Currently hardcoded 'vesselId' to avoid further complexity in this code challenge:
-        vesselId: "clps1l18j0001103bi6z7tm68",
+        // Currently hardcoded 'vesselId' to avoid further complexity in this code challenge.
+        // However, this fails after `npm run db:reset` because the vesselId's change.
+        // Workaround: Open the sqllite db and find a valid vesselId.
+        vesselId: "clpwk1j0z0001wrm1u3ip2fyi",
       },
     });
 
