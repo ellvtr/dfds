@@ -13,6 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
+import { Toaster } from "~/components/ui/toaster";
+import { useToast } from "~/components/ui/use-toast";
 import { TABLE_DATE_FORMAT } from "~/constants";
 import { fetchData } from "~/utils";
 import type { ReturnType } from "./api/voyage/getAll";
@@ -22,12 +24,15 @@ export default function Home() {
     fetchData("voyage/getAll")
   );
 
+  const { toast } = useToast();
+
   const queryClient = useQueryClient();
   const mutation = useMutation(
     async (voyageId: string) => {
       const response = await fetch(`/api/voyage/delete?id=${voyageId}`, {
         method: "DELETE",
       });
+      console.log(`response`, response);
 
       if (!response.ok) {
         throw new Error("Failed to delete the voyage");
@@ -36,6 +41,12 @@ export default function Home() {
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries(["voyages"]);
+      },
+      onError: (error) => {
+        toast({
+          title: "Error",
+          description: String(error),
+        });
       },
     }
   );
@@ -108,9 +119,11 @@ export default function Home() {
           </TableBody>
         </Table>
       </Layout>
+      {/* Voyage count debugging purposes: */}
       <div style={{ margin: "1rem" }}>
         <p>Number of voyages: {voyages?.length}</p>
       </div>
+      <Toaster />
     </>
   );
 }
