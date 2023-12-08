@@ -47,8 +47,18 @@ export default function Home() {
   return (
     <>
       <Sheet>
-        <SheetTrigger>
-          <Button style={{ margin: "0.5rem" }}>New voyage</Button>
+        <SheetTrigger
+          style={{
+            backgroundColor: "white",
+            color: "black",
+            margin: "0.5rem",
+            padding: "0.5rem",
+            borderRadius: "0.5rem",
+          }}
+        >
+          {/* Not using Button component here, as I get a warning not to nest a button within a button;
+          it turns out that SheetTrigger is a button element. */}
+          New voyage
         </SheetTrigger>
         <SheetContent>
           <NewVoyageForm />
