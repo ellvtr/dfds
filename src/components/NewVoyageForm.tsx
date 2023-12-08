@@ -87,6 +87,8 @@ export const NewVoyageForm = () => {
         Submit
       </Button>
       <SheetClose style={{ width: "100%" }} id="cancelNewVoyage">
+        {/* Not using Button component here, as I cannot nest a button within a button;
+          it turns out that SheetClose is a button element. */}
         Cancel
       </SheetClose>
     </SheetHeader>
