@@ -21,7 +21,6 @@ const handler: NextApiHandler = async (
       scheduledArrival,
       scheduledDeparture,
     } = query;
-    console.log(`query`, query);
 
     const createdVoyage = await prisma.voyage.create({
       data: {
