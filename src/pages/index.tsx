@@ -32,7 +32,6 @@ export default function Home() {
       const response = await fetch(`/api/voyage/delete?id=${voyageId}`, {
         method: "DELETE",
       });
-      console.log(`response`, response);
 
       if (!response.ok) {
         throw new Error("Failed to delete the voyage");

@@ -33,8 +33,6 @@ const handler: NextApiHandler = async (
       },
     });
 
-    console.log(`createdVoyage`, createdVoyage);
-
     createdVoyage ? res.status(204) : res.status(404);
     res.end();
     return;
