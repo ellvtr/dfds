@@ -13,7 +13,6 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
   // Added 'GET' in order to debug in browser
   if (req.method === "PUT" || req.method === "GET") {
     const query = req.query as NewVoyageQueryPayload;
-    console.log(`query`, query);
     const { portOfDischarge, portOfLoading, scheduledArrival, scheduledDeparture, vesselId } = query;
 
     const createdVoyage = await prisma.voyage.create({

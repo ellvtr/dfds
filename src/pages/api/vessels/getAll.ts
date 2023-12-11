@@ -1,4 +1,4 @@
-import type { Vessel, Voyage } from "@prisma/client";
+import type { Vessel } from "@prisma/client";
 import type { NextApiHandler, NextApiResponse } from "next";
 import { prisma } from "~/server/db";
 

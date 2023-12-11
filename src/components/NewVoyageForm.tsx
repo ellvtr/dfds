@@ -22,14 +22,10 @@ export const NewVoyageForm = (props: Props) => {
 
   const mutation = useMutation(
     async (values: NewVoyageFormValues) => {
-      const queryString = Object.keys(values).reduce(
-        (acc, key) => (acc += `&${key}=${values[key as keyof NewVoyageFormValues]}`),
-        ""
-      );
+      const keys = Object.keys(values) as (keyof NewVoyageFormValues)[];
+      const queryString = keys.reduce((acc, key) => (acc += `&${key}=${values[key]}`), "");
 
-      const response = await fetch(`/api/voyage/add?${queryString}`, {
-        method: "PUT",
-      });
+      const response = await fetch(`/api/voyage/add?${queryString}`, { method: "PUT" });
 
       if (!response.ok) {
         throw new Error("Failed to create the voyage");
