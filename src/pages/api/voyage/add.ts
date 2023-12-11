@@ -19,8 +19,8 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
       data: {
         portOfLoading,
         portOfDischarge,
-        scheduledDeparture: new Date(parseInt(scheduledDeparture)).toISOString(),
-        scheduledArrival: new Date(parseInt(scheduledArrival)).toISOString(),
+        scheduledDeparture,
+        scheduledArrival,
         vesselId,
       },
     });

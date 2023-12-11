@@ -3,14 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { SheetClose, SheetHeader, SheetTitle } from "~/components/ui/sheet";
-
-export type NewVoyageFormValues = {
-  portOfLoading: string;
-  portOfDischarge: string;
-  scheduledDeparture: number;
-  scheduledArrival: number;
-  vesselId: string;
-};
+import { type NewVoyageQueryPayload } from "~/pages/api/voyage/add";
 
 type Props = {
   vessels: Vessel[] | null | undefined;
@@ -21,8 +14,8 @@ export const NewVoyageForm = (props: Props) => {
   const [errors, setErrors] = useState<string[]>([]);
 
   const mutation = useMutation(
-    async (values: NewVoyageFormValues) => {
-      const keys = Object.keys(values) as (keyof NewVoyageFormValues)[];
+    async (values: NewVoyageQueryPayload) => {
+      const keys = Object.keys(values) as (keyof NewVoyageQueryPayload)[];
       const queryString = keys.reduce((acc, key) => (acc += `&${key}=${values[key]}`), "");
 
       const response = await fetch(`/api/voyage/add?${queryString}`, { method: "PUT" });
@@ -39,7 +32,7 @@ export const NewVoyageForm = (props: Props) => {
     }
   );
 
-  const handleCreate = (values: NewVoyageFormValues) => {
+  const handleCreate = (values: NewVoyageQueryPayload) => {
     mutation.mutate(values);
   };
 
@@ -106,24 +99,24 @@ than to learn a new library.
 /** Get form values from DOM, quick and dirty */
 const getValues = () => {
   const depStr = (document.getElementById("scheduledDeparture") as HTMLInputElement)?.value;
-  const depUnix = new Date(depStr).valueOf();
+  const depIso = new Date(depStr).toISOString();
 
   const arrStr = (document.getElementById("scheduledArrival") as HTMLInputElement)?.value;
-  const arrUnix = new Date(arrStr).valueOf();
+  const arrIso = new Date(arrStr).toISOString();
 
-  const values: NewVoyageFormValues = {
+  const values: NewVoyageQueryPayload = {
     portOfLoading: (document.getElementById("portOfLoading") as HTMLInputElement)?.value,
     portOfDischarge: (document.getElementById("portOfDischarge") as HTMLInputElement)?.value,
     vesselId: (document.getElementById("vessel") as HTMLInputElement)?.value,
-    scheduledDeparture: depUnix,
-    scheduledArrival: arrUnix,
+    scheduledDeparture: depIso,
+    scheduledArrival: arrIso,
   };
 
   return values;
 };
 
 /** Get form errors if any, otherwise return null */
-const getFormErrors = (values: NewVoyageFormValues) => {
+const getFormErrors = (values: NewVoyageQueryPayload) => {
   const errors: string[] = [];
 
   if (!values.portOfLoading) errors.push("Port of loading required");
