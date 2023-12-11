@@ -1,3 +1,4 @@
+import { type Vessel } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import Head from "next/head";
@@ -14,6 +15,7 @@ import type { ReturnType } from "./api/voyage/getAll";
 
 export default function Home() {
   const { data: voyages } = useQuery<ReturnType>(["voyages"], () => fetchData("voyage/getAll"));
+  const { data: vessels } = useQuery<Vessel[]>(["vessels"], () => fetchData("vessels/getAll"));
 
   const { toast } = useToast();
 
@@ -62,7 +64,7 @@ export default function Home() {
           New voyage
         </SheetTrigger>
         <SheetContent>
-          <NewVoyageForm />
+          <NewVoyageForm vessels={vessels} />
         </SheetContent>
       </Sheet>
       <Head>

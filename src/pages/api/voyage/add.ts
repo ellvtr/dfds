@@ -6,15 +6,15 @@ export type NewVoyageQueryPayload = {
   portOfDischarge: string;
   scheduledDeparture: string;
   scheduledArrival: string;
+  vesselId: string;
 };
 
 const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse<undefined>) => {
   // Added 'GET' in order to debug in browser
   if (req.method === "PUT" || req.method === "GET") {
     const query = req.query as NewVoyageQueryPayload;
-    const { portOfDischarge, portOfLoading, scheduledArrival, scheduledDeparture } = query;
-
-    const vessel = await prisma.vessel.findFirst();
+    console.log(`query`, query);
+    const { portOfDischarge, portOfLoading, scheduledArrival, scheduledDeparture, vesselId } = query;
 
     const createdVoyage = await prisma.voyage.create({
       data: {
@@ -22,9 +22,7 @@ const handler: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse
         portOfDischarge,
         scheduledDeparture: new Date(parseInt(scheduledDeparture)).toISOString(),
         scheduledArrival: new Date(parseInt(scheduledArrival)).toISOString(),
-        // Currently hardcoded to use same vessel each time to avoid further
-        // complexity in this code challenge.
-        vesselId: vessel?.id ?? "<DUMMY_ID>",
+        vesselId,
       },
     });
 

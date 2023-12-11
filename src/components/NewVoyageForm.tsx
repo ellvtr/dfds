@@ -1,3 +1,4 @@
+import type { Vessel } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
@@ -8,16 +9,23 @@ export type NewVoyageFormValues = {
   portOfDischarge: string;
   scheduledDeparture: number;
   scheduledArrival: number;
+  vesselId: string;
 };
 
-export const NewVoyageForm = () => {
+type Props = {
+  vessels: Vessel[] | null | undefined;
+};
+
+export const NewVoyageForm = (props: Props) => {
+  const { vessels } = props;
   const [errors, setErrors] = useState<string[]>([]);
 
   const mutation = useMutation(
     async (values: NewVoyageFormValues) => {
-      const { portOfDischarge, portOfLoading, scheduledArrival, scheduledDeparture } = values;
-
-      const queryString = `portOfDischarge=${portOfDischarge}&portOfLoading=${portOfLoading}&scheduledArrival=${scheduledArrival}&scheduledDeparture=${scheduledDeparture}`;
+      const queryString = Object.keys(values).reduce(
+        (acc, key) => (acc += `&${key}=${values[key as keyof NewVoyageFormValues]}`),
+        ""
+      );
 
       const response = await fetch(`/api/voyage/add?${queryString}`, {
         method: "PUT",
@@ -39,6 +47,8 @@ export const NewVoyageForm = () => {
     mutation.mutate(values);
   };
 
+  if (!vessels) return <ErrorLine>Error: Vessel data missing</ErrorLine>;
+
   return (
     <SheetHeader>
       <SheetTitle>Crete new voyage</SheetTitle>
@@ -49,15 +59,24 @@ export const NewVoyageForm = () => {
       <label htmlFor="portOfLoading">Port of discharge</label>
       <input type="text" id="portOfDischarge" name="portOfDischarge" />
 
-      <label htmlFor="departure">Departure</label>
+      <label htmlFor="scheduledDeparture">Departure</label>
       <input type="datetime-local" id="scheduledDeparture" name="scheduledDeparture" />
 
-      <label htmlFor="arrival">Arrival</label>
+      <label htmlFor="scheduledDeparture">Arrival</label>
       <input type="datetime-local" id="scheduledArrival" name="scheduledArrival" />
 
-      <div style={{ color: "red" }}>
+      <label htmlFor="vessel">Vessel</label>
+      <select name="vessel" id="vessel">
+        {vessels.map((vessel) => (
+          <option key={vessel.id} value={vessel.id}>
+            {vessel.name}
+          </option>
+        ))}
+      </select>
+
+      <div>
         {errors.map((error) => (
-          <p key={error}>{error}</p>
+          <ErrorLine key={error}>{error}</ErrorLine>
         ))}
       </div>
 
@@ -99,6 +118,7 @@ const getValues = () => {
   const values: NewVoyageFormValues = {
     portOfLoading: (document.getElementById("portOfLoading") as HTMLInputElement)?.value,
     portOfDischarge: (document.getElementById("portOfDischarge") as HTMLInputElement)?.value,
+    vesselId: (document.getElementById("vessel") as HTMLInputElement)?.value,
     scheduledDeparture: depUnix,
     scheduledArrival: arrUnix,
   };
@@ -110,25 +130,23 @@ const getValues = () => {
 const getFormErrors = (values: NewVoyageFormValues) => {
   const errors: string[] = [];
 
-  if (!values.portOfLoading) {
-    errors.push("Port of loading required");
-  }
+  if (!values.portOfLoading) errors.push("Port of loading required");
 
-  if (!values.portOfDischarge) {
-    errors.push("Port of discharge required");
-  }
+  if (!values.portOfDischarge) errors.push("Port of discharge required");
 
-  if (!values.scheduledDeparture) {
-    errors.push("Departure required");
-  }
+  if (!values.scheduledDeparture) errors.push("Departure required");
 
-  if (!values.scheduledArrival) {
-    errors.push("Arrival required");
-  }
+  if (!values.scheduledArrival) errors.push("Arrival required");
+
+  if (!values.vesselId) errors.push("Vessel required");
 
   if (values.scheduledArrival < values.scheduledDeparture) {
     errors.push("Arrival must be after departure");
   }
 
   return errors.length ? errors : null;
+};
+
+const ErrorLine = (props: { children: React.ReactNode }) => {
+  return <p style={{ color: "red" }}>{props.children}</p>;
 };
