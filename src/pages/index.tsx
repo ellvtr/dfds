@@ -49,6 +49,10 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>Voyages | DFDS</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Sheet>
         <SheetTrigger
           style={{
@@ -68,10 +72,6 @@ export default function Home() {
           <NewVoyageForm vessels={vessels} />
         </SheetContent>
       </Sheet>
-      <Head>
-        <title>Voyages | DFDS</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <Layout>
         <Table>
           <TableHeader>
