@@ -54,7 +54,8 @@ export default function Home() {
           style={{
             backgroundColor: "white",
             color: "black",
-            margin: "0.5rem",
+            display: "block",
+            margin: "0.5rem auto",
             padding: "0.5rem",
             borderRadius: "0.5rem",
           }}
@@ -102,7 +103,7 @@ export default function Home() {
         </Table>
       </Layout>
       {/* Voyage count for debugging purposes: */}
-      <div style={{ margin: "1rem" }}>
+      <div style={{ margin: "1rem", textAlign: "center" }}>
         <p>Number of voyages: {voyages?.length}</p>
       </div>
       <Toaster />

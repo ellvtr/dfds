@@ -129,7 +129,7 @@ const getFormErrors = (values: NewVoyageQueryPayload) => {
 
   if (!values.vesselId) errors.push("Vessel required");
 
-  if (values.scheduledArrival < values.scheduledDeparture) {
+  if (new Date(values.scheduledArrival).valueOf() < new Date(values.scheduledDeparture).valueOf()) {
     errors.push("Arrival must be after departure");
   }
 
