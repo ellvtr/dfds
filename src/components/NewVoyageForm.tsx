@@ -99,10 +99,10 @@ than to learn a new library.
 /** Get form values from DOM, quick and dirty */
 const getValues = () => {
   const depStr = (document.getElementById("scheduledDeparture") as HTMLInputElement)?.value;
-  const depIso = new Date(depStr).toISOString();
+  const depIso = getDate(depStr);
 
   const arrStr = (document.getElementById("scheduledArrival") as HTMLInputElement)?.value;
-  const arrIso = new Date(arrStr).toISOString();
+  const arrIso = getDate(arrStr);
 
   const values: NewVoyageQueryPayload = {
     portOfLoading: (document.getElementById("portOfLoading") as HTMLInputElement)?.value,
@@ -138,4 +138,12 @@ const getFormErrors = (values: NewVoyageQueryPayload) => {
 
 const ErrorLine = (props: { children: React.ReactNode }) => {
   return <p style={{ color: "red" }}>{props.children}</p>;
+};
+
+const getDate = (date: string) => {
+  try {
+    return new Date(date).toISOString();
+  } catch (error) {
+    return "";
+  }
 };
